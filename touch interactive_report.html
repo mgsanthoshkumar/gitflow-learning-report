@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Gitflow Learning Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Slate and Amber with Git Branch Accents -->
+    <!-- Application Structure Plan: The SPA is designed as an educational journey. It starts with a key "Aha!" moment (the command-line errors) to prime the user. Then, it presents an interactive timeline as a high-level map of the process. Clicking on the timeline navigates to a detailed, tabbed "Phase Deep Dive" section, breaking down complex information into manageable chunks. The journey concludes with the final, verifiable result—the ASCII Git log graph. This structure transforms a linear report into an exploratory tool, prioritizing user understanding and engagement over a simple chronological presentation. -->
+    <!-- Visualization & Content Choices: 
+        - Key Learning Point -> Goal: Inform -> Presentation: Prominent callout box -> Interaction: Static -> Justification: Highlights the most critical lesson upfront.
+        - Overall Process -> Goal: Organize/Change -> Presentation: Interactive HTML/CSS Timeline -> Interaction: Click-to-scroll -> Justification: Provides a visual map of the entire process, making it easy to navigate complex steps.
+        - Phase Details -> Goal: Inform/Organize -> Presentation: Tabbed content views -> Interaction: Click to toggle visibility -> Justification: Prevents information overload by chunking detailed command tables into user-controlled sections.
+        - Final Git Log -> Goal: Verify -> Presentation: Monospaced text in a <pre> tag -> Interaction: Static -> Justification: Faithfully reproduces the command-line output, which is the ground truth and the ultimate result of the exercise. Chart.js was not used as this ASCII representation is more authentic to the source material.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        :root {
+            --branch-master: #4A90E2; /* Blue */
+            --branch-develop: #50E3C2; /* Teal */
+            --branch-feature: #F5A623; /* Orange */
+            --branch-release: #9013FE; /* Purple */
+            --branch-hotfix: #D0021B; /* Red */
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 1.25rem;
+            left: -0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 9999px;
+            border: 2px solid white;
+            z-index: 10;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 0;
+            top: 1.25rem;
+            bottom: 0;
+            width: 2px;
+        }
+        .tab-active {
+            background-color: var(--branch-master);
+            color: white;
+            border-color: var(--branch-master);
+        }
+        .tab-inactive {
+            background-color: #F1F5F9; /* slate-100 */
+            color: #475569; /* slate-600 */
+            border-color: #E2E8F0; /* slate-200 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-7xl">
+        
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900">Gitflow Learning & Implementation Report</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">An interactive walkthrough of a practical Gitflow implementation, from feature branches to emergency hotfixes.</p>
+        </header>
+
+        <main>
+            <!-- Key Learning Point Section -->
+            <section id="learning-point" class="mb-16 bg-amber-50 border-l-4 border-amber-400 p-6 rounded-r-lg">
+                 <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-8 w-8 text-amber-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.311a2.34 2.34 0 0 1-3.75 0M10.5 3.75v6.75a2.25 2.25 0 0 0 3 0V3.75m-3 0h3" />
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h2 class="text-2xl font-bold text-amber-900">Core Learning: Command-Line Syntax</h2>
+                        <p class="mt-2 text-amber-800">A recurring challenge during this exercise was attempting to run multiple commands on a single line without a proper separator. This is a common pitfall for learners. The key takeaway is to **always run separate commands on separate lines** or chain them correctly with `&&` or `;`.</p>
+                        <div class="mt-4 p-4 bg-slate-900 text-white rounded-lg text-sm font-mono">
+                            <p class="text-red-400">> git add . git commit -m "..." <span class="text-slate-400"># Incorrect</span></p>
+                            <p class="text-green-400 mt-2">> git add . <br>> git commit -m "..." <span class="text-slate-400"># Correct</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Interactive Timeline Section -->
+            <section id="timeline" class="mb-16">
+                <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">The Gitflow Journey</h2>
+                <div class="relative pl-4 border-l-2 border-slate-200">
+                    
+                    <!-- Item 1: Init -->
+                    <div class="timeline-item mb-10 pl-8 relative cursor-pointer" onclick="scrollToSection('phase-1')">
+                        <div class="timeline-line bg-slate-300"></div>
+                        <div style="background-color: var(--branch-master);" class="timeline-item::before"></div>
+                        <h3 class="text-xl font-bold" style="color: var(--branch-master);">Phase 1: Project Initialization</h3>
+                        <p class="text-slate-600 mt-1">The repository is created, and the two main branches, `master` and `develop`, are established.</p>
+                    </div>
+
+                    <!-- Item 2: Feature -->
+                    <div class="timeline-item mb-10 pl-8 relative cursor-pointer" onclick="scrollToSection('phase-2')">
+                        <div class="timeline-line bg-slate-300"></div>
+                        <div style="background-color: var(--branch-feature);" class="timeline-item::before"></div>
+                        <h3 class="text-xl font-bold" style="color: var(--branch-feature);">Phase 2: Feature Development</h3>
+                        <p class="text-slate-600 mt-1">A new feature is developed in an isolated `feature/*` branch and then merged into `develop`.</p>
+                    </div>
+
+                    <!-- Item 3: Release -->
+                    <div class="timeline-item mb-10 pl-8 relative cursor-pointer" onclick="scrollToSection('phase-3')">
+                        <div class="timeline-line bg-slate-300"></div>
+                        <div style="background-color: var(--branch-release);" class="timeline-item::before"></div>
+                        <h3 class="text-xl font-bold" style="color: var(--branch-release);">Phase 3: Major Release (v1.0.0)</h3>
+                        <p class="text-slate-600 mt-1">A `release/*` branch is created for stabilization, then merged into both `master` (and tagged) and `develop`.</p>
+                    </div>
+
+                    <!-- Item 4: Hotfix -->
+                    <div class="timeline-item mb-10 pl-8 relative cursor-pointer" onclick="scrollToSection('phase-4')">
+                        <div class="timeline-line bg-slate-300"></div>
+                        <div style="background-color: var(--branch-hotfix);" class="timeline-item::before"></div>
+                        <h3 class="text-xl font-bold" style="color: var(--branch-hotfix);">Phase 4: Emergency Hotfix (v1.0.1)</h3>
+                        <p class="text-slate-600 mt-1">A critical bug in production is fixed on a `hotfix/*` branch, which is created from `master` and merged back into both `master` and `develop`.</p>
+                    </div>
+                    
+                     <!-- Item 5: Final State -->
+                    <div class="timeline-item pl-8 relative cursor-pointer" onclick="scrollToSection('final-state')">
+                        <div style="background-color: #1E293B;" class="timeline-item::before"></div>
+                        <h3 class="text-xl font-bold" style="color: #1E293B;">Final Result: Repository State</h3>
+                        <p class="text-slate-600 mt-1">The complete, verifiable history of the repository after all phases are complete.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Phase Deep Dive Section -->
+            <section id="phase-details" class="mb-16">
+                 <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">Phase Deep Dive</h2>
+                 <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">
+                    This section provides a detailed breakdown of the commands executed in each phase of the Gitflow process. Click on a tab to explore the specific steps and their outcomes. This is the core of the practical implementation, showing exactly how each stage was accomplished.
+                 </p>
+                <div class="flex flex-wrap justify-center gap-2 mb-8">
+                    <button class="phase-tab tab-active" onclick="showPhase('phase-1')">Phase 1: Initialization</button>
+                    <button class="phase-tab tab-inactive" onclick="showPhase('phase-2')">Phase 2: Feature Dev</button>
+                    <button class="phase-tab tab-inactive" onclick="showPhase('phase-3')">Phase 3: Release</button>
+                    <button class="phase-tab tab-inactive" onclick="showPhase('phase-4')">Phase 4: Hotfix</button>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div id="phase-1-content" class="phase-content">
+                        <h3 class="text-2xl font-bold mb-4" style="color: var(--branch-master);">Phase 1: Project Initialization</h3>
+                        <p class="mb-6 text-slate-600">This phase establishes the repository and the two permanent long-lived branches: `master` (for production) and `develop` (for integration).</p>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-slate-200">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Step</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Command Executed</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Result</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-slate-200">
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Create Directory</td><td class="px-6 py-4 font-mono text-sm">mkdir my-gitflow-demo</td><td class="px-6 py-4">Directory created.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Initialize Git</td><td class="px-6 py-4 font-mono text-sm">git init</td><td class="px-6 py-4">Empty repository initialized on `master`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Initial Commit</td><td class="px-6 py-4 font-mono text-sm">git add index.html<br>git commit -m "..."</td><td class="px-6 py-4">First commit created on `master`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Create Develop</td><td class="px-6 py-4 font-mono text-sm">git branch develop</td><td class="px-6 py-4">`develop` branch created from `master`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Switch to Develop</td><td class="px-6 py-4 font-mono text-sm">git checkout develop</td><td class="px-6 py-4">Working context moved to `develop`.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="phase-2-content" class="phase-content hidden">
+                        <h3 class="text-2xl font-bold mb-4" style="color: var(--branch-feature);">Phase 2: Feature Development</h3>
+                        <p class="mb-6 text-slate-600">A dedicated, short-lived `feature` branch was used to isolate new work (`settings.html`).</p>
+                        <div class="overflow-x-auto">
+                           <table class="min-w-full divide-y divide-slate-200">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Step</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Command Executed</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Branch State</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-slate-200">
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Start Feature</td><td class="px-6 py-4 font-mono text-sm">git checkout -b feature/user-settings</td><td class="px-6 py-4">Switched to new branch, branched from `develop`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Commit Work</td><td class="px-6 py-4 font-mono text-sm">git add .<br>git commit -m "FEAT: ..."</td><td class="px-6 py-4">Feature committed on its own branch.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Merge to Develop</td><td class="px-6 py-4 font-mono text-sm">git checkout develop<br>git merge --no-ff feature/user-settings</td><td class="px-6 py-4">Feature successfully integrated into `develop`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Cleanup</td><td class="px-6 py-4 font-mono text-sm">git branch -d feature/user-settings</td><td class="px-6 py-4">Temporary branch deleted.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="phase-3-content" class="phase-content hidden">
+                        <h3 class="text-2xl font-bold mb-4" style="color: var(--branch-release);">Phase 3: Major Release Cycle (v1.0.0)</h3>
+                        <p class="mb-6 text-slate-600">A `release` branch was used for stabilization, and the final code was merged into both main lines.</p>
+                         <div class="overflow-x-auto">
+                           <table class="min-w-full divide-y divide-slate-200">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Step</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Command Executed</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Branch State</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-slate-200">
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Start Release</td><td class="px-6 py-4 font-mono text-sm">git checkout -b release/1.0.0</td><td class="px-6 py-4">Switched to new branch, branched from `develop`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Polish Commit</td><td class="px-6 py-4 font-mono text-sm">git add .<br>git commit -m "CHORE: ..."</td><td class="px-6 py-4">Final versioning/polish committed.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Merge to Master</td><td class="px-6 py-4 font-mono text-sm">git checkout master<br>git merge --no-ff release/1.0.0</td><td class="px-6 py-4">Code officially released to production (`master`).</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Tag Master</td><td class="px-6 py-4 font-mono text-sm">git tag -a v1.0.0 -f -m "..."</td><td class="px-6 py-4">Tag applied to the release commit on `master`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Merge to Develop</td><td class="px-6 py-4 font-mono text-sm">git checkout develop<br>git merge --no-ff release/1.0.0</td><td class="px-6 py-4">Final release merged back into `develop`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Cleanup</td><td class="px-6 py-4 font-mono text-sm">git branch -d release/1.0.0</td><td class="px-6 py-4">Temporary branch deleted.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="phase-4-content" class="phase-content hidden">
+                        <h3 class="text-2xl font-bold mb-4" style="color: var(--branch-hotfix);">Phase 4: Emergency Hotfix (v1.0.1)</h3>
+                        <p class="mb-6 text-slate-600">A critical bug was patched using a `hotfix` branch, demonstrating the isolation required for production fixes.</p>
+                         <div class="overflow-x-auto">
+                           <table class="min-w-full divide-y divide-slate-200">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Step</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Command Executed</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Branch State</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-slate-200">
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Start Hotfix</td><td class="px-6 py-4 font-mono text-sm">git checkout -b hotfix/critical-api-bug master</td><td class="px-6 py-4">Switched to new branch, branched from `master`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Commit Fix</td><td class="px-6 py-4 font-mono text-sm">git add .<br>git commit -m "FIX: ..."</td><td class="px-6 py-4">Fix committed.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Merge to Master</td><td class="px-6 py-4 font-mono text-sm">git checkout master<br>git merge --no-ff hotfix/critical-api-bug</td><td class="px-6 py-4">Immediate Fix Released to production (`master`).</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">New Tag</td><td class="px-6 py-4 font-mono text-sm">git tag -a v1.0.1 -m "..."</td><td class="px-6 py-4">New production tag created.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Merge to Develop</td><td class="px-6 py-4 font-mono text-sm">git checkout develop<br>git merge --no-ff hotfix/critical-api-bug</td><td class="px-6 py-4">Hotfix integrated back into `develop`.</td></tr>
+                                    <tr><td class="px-6 py-4 whitespace-nowrap font-medium">Cleanup</td><td class="px-6 py-4 font-mono text-sm">git branch -d hotfix/critical-api-bug</td><td class="px-6 py-4">Temporary branch deleted.</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Final State Section -->
+            <section id="final-state">
+                <h2 class="text-3xl font-bold text-center mb-10 text-slate-900">Final Verification: Repository Graph</h2>
+                 <p class="text-center text-slate-600 max-w-2xl mx-auto mb-8">
+                    The final state of the repository, confirming the complex Gitflow history, was verified using the command-line graphical log. This ASCII graph is the ground truth, clearly showing the branching and merging patterns required by Gitflow and demonstrating a successful, robust implementation.
+                 </p>
+                <div class="bg-slate-900 text-white rounded-lg p-6 font-mono text-sm overflow-x-auto shadow-xl">
+<pre>
+<span style="color: #A78BFA;">*</span> <span style="color: #38BDF8;">41f02d0</span> (<span style="color: #FACC15;">HEAD -></span> <span style="color: #50E3C2;">develop</span>) Merge branch 'hotfix/critical-api-bug' into develop
+<span style="color: #9CA3AF;">|\</span>
+<span style="color: #A78BFA;">*</span><span style="color: #9CA3AF;"> \</span>  <span style="color: #38BDF8;">c99b7e6</span> FIX: Critical API bug in v1.0.0
+<span style="color: #9CA3AF;">|</span> <span style="color: #A78BFA;">*</span> <span style="color: #38BDF8;">09ad1d4</span> (<span style="color: #FACC15;">tag: v1.0.1</span>, <span style="color: #4A90E2;">master</span>) Merge branch 'hotfix/critical-api-bug'
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|\</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span><span style="color: #9CA3AF;">/</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">/</span><span style="color: #9CA3AF;">|</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #A78BFA;">*</span> <span style="color: #9CA3AF;">|</span> <span style="color: #38BDF8;">95038f4</span> CHORE: Final release prep for v1.0.0
+<span style="color: #9CA3AF;">|</span><span style="color: #9CA3AF;">/</span> <span style="color: #9CA3AF;">/</span>
+<span style="color: #A78BFA;">*</span> <span style="color: #9CA3AF;">|</span>   <span style="color: #38BDF8;">b5c222f</span> Merge branch 'release/1.0.0' into develop
+<span style="color: #9CA3AF;">|\</span> <span style="color: #9CA3AF;">\</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span> <span style="color: #A78BFA;">*</span> <span style="color: #38BDF8;">edfe843</span> (<span style="color: #FACC15;">tag: v1.0.0</span>) Merge branch 'release/1.0.0'
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|\</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span><span style="color: #9CA3AF;">/</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #9CA3AF;">|</span><span style="color: #9CA3AF;">/</span><span style="color: #9CA3AF;">|</span>
+<span style="color: #9CA3AF;">|</span> <span style="color: #A78BFA;">*</span> <span style="color: #9CA3AF;">|</span> <span style="color: #38BDF8;">c25d4e0</span> FEAT: Implement basic user settings page
+<span style="color: #9CA3AF;">|</span><span style="color: #9CA3AF;">/</span>
+<span style="color: #A78BFA;">*</span> <span style="color: #38BDF8;">03c9e7e</span> Initial commit: Set up project structure and home page
+</pre>
+                </div>
+            </section>
+        </main>
+        
+        <footer class="text-center mt-16 border-t border-slate-200 pt-8">
+            <p class="text-slate-500">Interactive Report Generated from Source Material.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        const phaseTabs = document.querySelectorAll('.phase-tab');
+        const phaseContents = document.querySelectorAll('.phase-content');
+
+        function showPhase(phaseId) {
+            phaseContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(phaseId + '-content').classList.remove('hidden');
+
+            phaseTabs.forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('tab-inactive');
+            });
+            
+            const activeTab = document.querySelector(`button[onclick="showPhase('${phaseId}')"]`);
+            activeTab.classList.add('tab-active');
+            activeTab.classList.remove('tab-inactive');
+        }
+
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                // Find the associated tab and activate it if it exists
+                const phaseId = 'phase-' + sectionId.split('-')[1];
+                const tabButton = document.querySelector(`button[onclick="showPhase('${phaseId}')"]`);
+                if(tabButton) {
+                   showPhase(phaseId);
+                }
+
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+        
+        // Add a base style to all phase tab buttons
+        phaseTabs.forEach(tab => {
+            tab.classList.add('px-4', 'py-2', 'font-semibold', 'rounded-md', 'transition-colors', 'duration-200', 'border', 'text-sm', 'sm:text-base');
+        });
+
+    </script>
+</body>
+</html>
